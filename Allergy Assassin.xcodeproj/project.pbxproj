@@ -21,6 +21,9 @@
 		CC5D9A29172D41860034C89A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A0A172D41850034C89A /* Foundation.framework */; };
 		CC5D9A31172D41860034C89A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CC5D9A2F172D41860034C89A /* InfoPlist.strings */; };
 		CC5D9A34172D41860034C89A /* Allergy_AssassinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5D9A33172D41860034C89A /* Allergy_AssassinTests.m */; };
+		CC5D9A41172D41ED0034C89A /* Allergies.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5D9A40172D41ED0034C89A /* Allergies.m */; };
+		CC5D9A44172D46A50034C89A /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5D9A43172D46A50034C89A /* Reachability.m */; };
+		CC5D9A47172D94930034C89A /* AllergiesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5D9A46172D94930034C89A /* AllergiesViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,12 @@
 		CC5D9A30172D41860034C89A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CC5D9A32172D41860034C89A /* Allergy_AssassinTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Allergy_AssassinTests.h; sourceTree = "<group>"; };
 		CC5D9A33172D41860034C89A /* Allergy_AssassinTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Allergy_AssassinTests.m; sourceTree = "<group>"; };
+		CC5D9A3F172D41ED0034C89A /* Allergies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Allergies.h; sourceTree = "<group>"; };
+		CC5D9A40172D41ED0034C89A /* Allergies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Allergies.m; sourceTree = "<group>"; };
+		CC5D9A42172D46A50034C89A /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		CC5D9A43172D46A50034C89A /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		CC5D9A45172D94930034C89A /* AllergiesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllergiesViewController.h; sourceTree = "<group>"; };
+		CC5D9A46172D94930034C89A /* AllergiesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllergiesViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +123,8 @@
 			children = (
 				CC5D9A17172D41850034C89A /* AppDelegate.h */,
 				CC5D9A18172D41850034C89A /* AppDelegate.m */,
+				CC5D9A3E172D41B20034C89A /* Controllers */,
+				CC5D9A3D172D41AB0034C89A /* Models */,
 				CC5D9A0F172D41850034C89A /* Supporting Files */,
 			);
 			path = "Allergy Assassin";
@@ -150,6 +161,26 @@
 				CC5D9A2F172D41860034C89A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CC5D9A3D172D41AB0034C89A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CC5D9A42172D46A50034C89A /* Reachability.h */,
+				CC5D9A43172D46A50034C89A /* Reachability.m */,
+				CC5D9A3F172D41ED0034C89A /* Allergies.h */,
+				CC5D9A40172D41ED0034C89A /* Allergies.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		CC5D9A3E172D41B20034C89A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CC5D9A45172D94930034C89A /* AllergiesViewController.h */,
+				CC5D9A46172D94930034C89A /* AllergiesViewController.m */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,6 +294,9 @@
 			files = (
 				CC5D9A15172D41850034C89A /* main.m in Sources */,
 				CC5D9A19172D41850034C89A /* AppDelegate.m in Sources */,
+				CC5D9A41172D41ED0034C89A /* Allergies.m in Sources */,
+				CC5D9A44172D46A50034C89A /* Reachability.m in Sources */,
+				CC5D9A47172D94930034C89A /* AllergiesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
