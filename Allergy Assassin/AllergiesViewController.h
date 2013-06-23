@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AllergiesViewController : UINavigationController
+@class AllergiesInternalViewController;
+
+@interface AllergiesViewController : UINavigationController {
+    AllergiesInternalViewController *_internalViewController;
+}
 
 @end

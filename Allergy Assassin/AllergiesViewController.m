@@ -26,23 +26,27 @@
 
 - (id)init
 {
-    AllergiesInternalViewController *internalViewController =
-        [[AllergiesInternalViewController alloc]
-            initWithAllergies:[Allergies init]];
-    [self pushViewController:internalViewController animated:NO];
+    self = [super init];
+    
+    self.navigationBar.barStyle = UIBarStyleBlack;
+    self.toolbar.barStyle = UIBarStyleBlack;
+
+    _internalViewController = [[AllergiesInternalViewController alloc]
+            initWithAllergies:[[Allergies alloc] init]];
+    [self pushViewController:_internalViewController animated:NO];
+    
+    [self setToolbarHidden:NO];
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end
@@ -53,14 +57,26 @@ NSArray *allergiesList;
 Allergies *allergies;
 
 - (id) init {
-    allergies = [Allergies init];
+    self  = [super init];
+    allergies = [[Allergies alloc] init];
     return [self initWithAllergies:allergies];
 }
 
 - (id) initWithAllergies: (Allergies *)allergies {
     allergiesList = [[allergies getAllergies] allObjects];
     self = [self initWithStyle:UITableViewStylePlain];
+    self.title = @"Allergies";
+    
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Add" style:UIBarButtonItemStyleBordered target: self action: @selector(addAllergyButtonWasPressed)];
+    
+    self.toolbarItems = @[flexibleSpace, addButton];
+
     return self;
+}
+
+- (void) addAllergyButtonWasPressed {
+    
 }
 
 #pragma mark UITableViewDataSource methods
@@ -81,7 +97,7 @@ Allergies *allergies;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Allergies";
+    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

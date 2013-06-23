@@ -20,30 +20,33 @@ NSUserDefaults *defaults;
     return [self initWithAllergies:[NSArray arrayWithObjects:nil]];
 }
 
-- (id) initWithAllergies: (NSArray *) allergies {
+- (id) initWithAllergies: (NSArray *) providedAllergies {
+    self  = [super init];
     defaults = [NSUserDefaults standardUserDefaults];
     
-    if ([allergies count] > 0) {
-        self.allergies = [NSSet setWithArray:allergies];
+    if ([providedAllergies count] > 0) {
+        allergies = [NSSet setWithArray:providedAllergies];
         [self saveAllergies];
     } else {
-        self.allergies = [self getAllergies];
+        allergies = [self getAllergies];
     }
         
     return self;
 }
 
-- (void)setAllergies:(NSArray *)allergies {
-    [self setAllergiesWithSet:[NSSet setWithArray:allergies]];
+- (void)setAllergies:(NSArray *)providedAllergies {
+    [self setAllergiesWithSet:[NSSet setWithArray:providedAllergies]];
 }
 
-- (void)setAllergiesWithSet: (NSSet *) allergies {
-    self.allergies = allergies;
+- (void)setAllergiesWithSet: (NSSet *) providedAllergies {
+    allergies = providedAllergies;
     [self saveAllergies];
 }
 
 - (NSSet *) getAllergies {
     NSSet *storedAllergies = [defaults objectForKey:allergiesKey];
+    if (storedAllergies == nil)
+        storedAllergies = [[NSSet alloc] init];
     return storedAllergies;
 }
 
