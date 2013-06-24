@@ -13,7 +13,7 @@
 
 @end
 
-@interface AllergiesInternalViewController: UITableViewController {
+@interface AllergiesInternalViewController: UITableViewController <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate> {
     
 }
 
@@ -27,9 +27,6 @@
 - (id)init
 {
     self = [super init];
-    
-    self.navigationBar.barStyle = UIBarStyleBlack;
-    self.toolbar.barStyle = UIBarStyleBlack;
 
     _internalViewController = [[AllergiesInternalViewController alloc]
             initWithAllergies:[[Allergies alloc] init]];
@@ -37,16 +34,6 @@
     
     [self setToolbarHidden:NO];
     return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
 }
 
 @end
@@ -66,6 +53,7 @@ Allergies *allergies;
     allergiesList = [[allergies getAllergies] allObjects];
     self = [self initWithStyle:UITableViewStylePlain];
     self.title = @"Allergies";
+
     
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Add" style:UIBarButtonItemStyleBordered target: self action: @selector(addAllergyButtonWasPressed)];
@@ -76,7 +64,20 @@ Allergies *allergies;
 }
 
 - (void) addAllergyButtonWasPressed {
+    UIAlertView *addAllergyAlert = [[UIAlertView alloc]
+                                    initWithTitle:@"" message:@"Add Allergy" delegate:self
+                                    cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    addAllergyAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [addAllergyAlert show];
     
+}
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex==1) {
+        NSString* allergyText = [[alertView textFieldAtIndex:0]text];
+        [allergies addAllergy:allergyText];
+        [self.tableView reloadData];
+    }
 }
 
 #pragma mark UITableViewDataSource methods
@@ -132,13 +133,5 @@ Allergies *allergies;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-}
-
-#pragma mark UIViewController methods
-
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return NO;
 }
 @end

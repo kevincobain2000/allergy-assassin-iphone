@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43EE2ED11778EB9B00E36AE6 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EE2ED01778EB9B00E36AE6 /* SearchViewController.m */; };
 		CC5D9A09172D41850034C89A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A08172D41850034C89A /* UIKit.framework */; };
 		CC5D9A0B172D41850034C89A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A0A172D41850034C89A /* Foundation.framework */; };
 		CC5D9A0D172D41850034C89A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A0C172D41850034C89A /* CoreGraphics.framework */; };
@@ -36,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		43EE2ECF1778EB9B00E36AE6 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		43EE2ED01778EB9B00E36AE6 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		CC5D9A05172D41850034C89A /* Allergy Assassin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Allergy Assassin.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC5D9A08172D41850034C89A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CC5D9A0A172D41850034C89A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -174,6 +177,8 @@
 			children = (
 				CC5D9A45172D94930034C89A /* AllergiesViewController.h */,
 				CC5D9A46172D94930034C89A /* AllergiesViewController.m */,
+				43EE2ECF1778EB9B00E36AE6 /* SearchViewController.h */,
+				43EE2ED01778EB9B00E36AE6 /* SearchViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -291,6 +296,7 @@
 				CC5D9A19172D41850034C89A /* AppDelegate.m in Sources */,
 				CC5D9A41172D41ED0034C89A /* Allergies.m in Sources */,
 				CC5D9A47172D94930034C89A /* AllergiesViewController.m in Sources */,
+				43EE2ED11778EB9B00E36AE6 /* SearchViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

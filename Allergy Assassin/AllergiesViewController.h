@@ -10,7 +10,7 @@
 
 @class AllergiesInternalViewController;
 
-@interface AllergiesViewController : UINavigationController {
+@interface AllergiesViewController : UINavigationController <UISplitViewControllerDelegate> {
     AllergiesInternalViewController *_internalViewController;
 }
 
