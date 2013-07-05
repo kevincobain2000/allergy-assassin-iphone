@@ -10,10 +10,17 @@
 
 NSString* const allergiesKey = @"allergies";
 
+@interface Allergies ()
+
+@property NSUserDefaults *defaults;
+@property NSMutableArray *allergies;
+
+@end
+
 @implementation Allergies
 
 @synthesize allergies;
-NSUserDefaults *defaults;
+@synthesize defaults;
 
 
 - (id) init {
@@ -25,47 +32,54 @@ NSUserDefaults *defaults;
     defaults = [NSUserDefaults standardUserDefaults];
     
     if ([providedAllergies count] > 0) {
-        allergies = [NSSet setWithArray:providedAllergies];
-        [self saveAllergies];
+        allergies = [[NSMutableArray alloc] initWithArray:providedAllergies];
     } else {
-        allergies = [self getAllergies];
+        allergies = [[NSMutableArray alloc] init];
     }
-        
+    
+    [self saveAllergies];
     return self;
 }
 
-- (void)setAllergies:(NSArray *)providedAllergies {
-    [self setAllergiesWithSet:[NSSet setWithArray:providedAllergies]];
-}
-
-- (void)setAllergiesWithSet: (NSSet *) providedAllergies {
-    allergies = providedAllergies;
-    [self saveAllergies];
-}
-
 - (NSSet *) getAllergies {
-    NSSet *storedAllergies = [defaults objectForKey:allergiesKey];
-    if (storedAllergies == nil)
-        storedAllergies = [[NSSet alloc] init];
-    return storedAllergies;
+    return [[NSSet alloc] initWithArray:(NSArray *)allergies];
 }
 
 - (void) saveAllergies {
     [defaults removeObjectForKey:allergiesKey];
-    [defaults setObject:self.allergies forKey:allergiesKey];
+    [defaults setObject:(NSArray *)allergies forKey:allergiesKey];
 }
 
 - (void) addAllergy:(NSString *)allergy {
-    NSMutableArray *newAllergies = [NSMutableArray arrayWithObjects: [self.allergies allObjects]];
-    [newAllergies addObject:allergy];
-    [self setAllergies:newAllergies];
+    [allergies addObject:allergy];
+    [self saveAllergies];
 }
 
 - (void) removeAllergy:(NSString *) allergy {
-    NSSet  *newAllergies = [self.allergies filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary * bindings)
-            { return [evaluatedObject isEqualToString:allergy]; }]];
+    [allergies removeObject:allergy];
+    [self saveAllergies];
+}
+
++ (NSArray *) typicalAllergiesList {
+    //TODO: pull from http://api.allergyassassin.com/autocomplete/allergy and store locally
     
-    [self setAllergiesWithSet:newAllergies];
+    return @[
+             @"barley",
+             @"egg",
+             @"garlic",
+             @"gluten",
+             @"kidney beans",
+             @"lime",
+             @"milk",
+             @"nut",
+             @"peanut",
+             @"shellfish",
+             @"soy",
+             @"wheat",
+             @"seafood",
+             @"dairy",
+             @"kidney bean"
+        ];
 }
 
 

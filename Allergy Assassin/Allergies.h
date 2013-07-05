@@ -12,9 +12,6 @@ NSString* const allergiesKey;
 
 @interface Allergies : NSObject
 
-@property (nonatomic, retain) NSSet *allergies;
-
-
 - (id) init;
 - (id) initWithAllergies:(NSArray *) allergies;
 - (void) setAllergies:(NSArray *)allergies;
@@ -22,5 +19,6 @@ NSString* const allergiesKey;
 - (void) addAllergy:(NSString *)allergy;
 - (void) removeAllergy:(NSString *) allergy;
 
++ (NSArray *) typicalAllergiesList;
 
 @end

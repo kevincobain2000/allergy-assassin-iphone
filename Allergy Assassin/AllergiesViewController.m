@@ -8,6 +8,7 @@
 
 #import "AllergiesViewController.h"
 #import "Allergies.h"
+#import "AddAllergyViewController.h"
 
 @interface AllergiesViewController ()
 
@@ -16,6 +17,10 @@
 @interface AllergiesInternalViewController: UITableViewController <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate> {
     
 }
+
+@property Allergies *allergies;
+@property NSArray *allergiesList;
+
 
 - (id) init;
 - (id) initWithAllergies: (Allergies *) allergies;
@@ -32,7 +37,7 @@
             initWithAllergies:[[Allergies alloc] init]];
     [self pushViewController:_internalViewController animated:NO];
     
-    [self setToolbarHidden:NO];
+    [self setToolbarHidden:YES];
     return self;
 }
 
@@ -40,36 +45,38 @@
 
 @implementation AllergiesInternalViewController
 
-NSArray *allergiesList;
-Allergies *allergies;
+@synthesize allergies;
+@synthesize allergiesList;
 
 - (id) init {
-    self  = [super init];
     allergies = [[Allergies alloc] init];
     return [self initWithAllergies:allergies];
 }
 
-- (id) initWithAllergies: (Allergies *)allergies {
-    allergiesList = [[allergies getAllergies] allObjects];
-    self = [self initWithStyle:UITableViewStylePlain];
-    self.title = @"Allergies";
+- (id) initWithAllergies: (Allergies *) theAllergies {
+    self = [super init];
+    if (self != nil) {
+        allergies = theAllergies;
+        
+        self.title = @"Allergies";
 
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                            target: self action: @selector(addAllergyButtonWasPressed)];
+        self.navigationItem.rightBarButtonItem = addButton;
+    }
     
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Add" style:UIBarButtonItemStyleBordered target: self action: @selector(addAllergyButtonWasPressed)];
-    
-    self.toolbarItems = @[flexibleSpace, addButton];
-
     return self;
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    allergiesList = [[allergies getAllergies] allObjects];
+    [super viewDidAppear:animated];
+    [self.tableView reloadData];
+}
+
 - (void) addAllergyButtonWasPressed {
-    UIAlertView *addAllergyAlert = [[UIAlertView alloc]
-                                    initWithTitle:@"" message:@"Add Allergy" delegate:self
-                                    cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    addAllergyAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [addAllergyAlert show];
-    
+    UIViewController *addAllergyView = [[AddAllergyViewController alloc] initWithAllergies:allergies];
+    [self.navigationController pushViewController:addAllergyView animated:YES];
 }
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -79,6 +86,7 @@ Allergies *allergies;
         [self.tableView reloadData];
     }
 }
+
 
 #pragma mark UITableViewDataSource methods
 
