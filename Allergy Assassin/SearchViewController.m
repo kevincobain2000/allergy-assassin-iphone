@@ -7,6 +7,8 @@
 //
 
 #import "SearchViewController.h"
+#import "ResultsViewController.h"
+#import "AllergyAssassinSearch.h"
 
 @interface SearchViewController ()
 
@@ -15,8 +17,12 @@
 
 @interface SearchInternalViewController: UITableViewController <UISearchBarDelegate> {
 }
+@property (retain) AllergyAssassinSearch *aaSearch;
+@property (retain) Allergies *allergies;
+
 
 - (id) init;
+- (void) searchForDish:(NSString *) dish;
 
 @end
 
@@ -29,7 +35,7 @@
     _internalViewController = [[SearchInternalViewController alloc] init];
     [self pushViewController:_internalViewController animated:NO];
     
-    [self setToolbarHidden:NO];
+    [self setToolbarHidden:YES];
     return self;
 }
 
@@ -50,6 +56,9 @@
 
 @implementation SearchInternalViewController
 
+@synthesize aaSearch;
+@synthesize allergies;
+
 - (id) init {
     self = [super init];
     self.title = @"Search";
@@ -60,6 +69,19 @@
     
     [self.tableView setTableHeaderView:searchBar];
     return self;
+}
+
+- (void) searchForDish: (NSString *) dish {
+    aaSearch = [[AllergyAssassinSearch alloc] init];
+    ResultsViewController *resultsView = [[ResultsViewController alloc] init];
+    [self.navigationController pushViewController:resultsView animated:YES];
+    
+    [aaSearch searchForDish:dish andOnResults: ^(AllergyAssassinResults *results) {
+        [resultsView receiveResults:results];
+    } andOnFailure:^(NSError *error) {
+        [resultsView receiveError:error];
+    }];
+    
 }
 
 # pragma mark UISearchBarDelegate methods
@@ -74,6 +96,9 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
+    [self searchForDish:[searchBar text]];
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar setText:@""];
 }
 
 @end

@@ -17,11 +17,15 @@
 - (id) initWithResultString:(NSString *)resultString;
 - (id) initWithResultData:(NSData *)resultData;
 
+- (NSMutableDictionary *) resultsByRating;
+- (NSString *) verboseResults;
+
 
 @end
 
 @interface AllergyAssassinSearch : NSObject
 
+- (id) init;
 - (id) initWithAllergies:(Allergies *) theAllergies;
 - (void) searchForDish:(NSString *)dishName andOnResults:(void(^)(AllergyAssassinResults *results))successBlock andOnFailure:(void(^) (NSError *error)) errorBlock;
 

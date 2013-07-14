@@ -21,6 +21,10 @@
 
 const NSString *aaSearchPath = @"http://api.allergyassassin.com/search/";
 
+- (id) init {
+    return [self initWithAllergies:[[Allergies alloc] init]];
+}
+
 - (id) initWithAllergies: (Allergies *) theAllergies {
     self = [super init];
     if (self != nil) {
@@ -63,6 +67,8 @@ const NSString *aaSearchPath = @"http://api.allergyassassin.com/search/";
 @synthesize results;
 @synthesize apiVersion;
 
+const NSUInteger numRatings = 6;  //number of different rating numbers
+
 - (id) initWithResultString:(NSString *)resultString {
     return [self initWithResultData:[resultString dataUsingEncoding:NSUTF8StringEncoding]];
 }
@@ -80,6 +86,26 @@ const NSString *aaSearchPath = @"http://api.allergyassassin.com/search/";
         }
     }
     return self;
+}
+
+- (NSMutableDictionary *) resultsByRating {
+    NSMutableDictionary *resultsByRating = [[NSMutableDictionary alloc] initWithCapacity:numRatings];
+    
+    [resultsByRating enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(id key, id obj, BOOL *stop) {
+        NSMutableArray *resultsForRating = [resultsByRating objectForKey:obj];
+        if (resultsForRating == nil) {
+            resultsForRating = [[NSMutableArray alloc] init];
+        }
+        [resultsForRating arrayByAddingObject:key];
+        [resultsByRating setObject:resultsForRating forKey:key];
+    }];
+    
+    return resultsByRating;
+    
+}
+
+- (NSString *) verboseResults {
+    return @"TEXTUAL REPRESENTATION";
 }
 
 @end

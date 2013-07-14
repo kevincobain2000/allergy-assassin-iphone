@@ -14,7 +14,7 @@
 
 @end
 
-@interface AllergiesInternalViewController: UITableViewController <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate> {
+@interface AllergiesInternalViewController: UITableViewController <UITableViewDelegate, UITableViewDataSource> {
     
 }
 
@@ -69,6 +69,8 @@
 }
 
 - (void) viewDidAppear:(BOOL)animated {
+    [self setEditing:YES];
+
     allergiesList = [[allergies getAllergies] allObjects];
     [super viewDidAppear:animated];
     [self.tableView reloadData];
@@ -77,14 +79,6 @@
 - (void) addAllergyButtonWasPressed {
     UIViewController *addAllergyView = [[AddAllergyViewController alloc] initWithAllergies:allergies];
     [self.navigationController pushViewController:addAllergyView animated:YES];
-}
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex==1) {
-        NSString* allergyText = [[alertView textFieldAtIndex:0]text];
-        [allergies addAllergy:allergyText];
-        [self.tableView reloadData];
-    }
 }
 
 
@@ -126,6 +120,10 @@
         return UITableViewCellEditingStyleDelete;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     // If row is deleted, remove it from the list.
     if (editingStyle == UITableViewCellEditingStyleDelete)
@@ -133,6 +131,9 @@
         UITableViewCell *cellToDelete = [tableView cellForRowAtIndexPath:indexPath];
         NSString *allergy = cellToDelete.textLabel.text;
         [allergies removeAllergy:allergy];
+        
+        allergiesList = [[allergies getAllergies] allObjects];
+        [self.tableView reloadData];
     }
 }
 
