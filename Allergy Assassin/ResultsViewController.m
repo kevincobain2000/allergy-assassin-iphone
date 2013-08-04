@@ -8,7 +8,7 @@
 
 #import "ResultsViewController.h"
 #import "AllergyAssassinSearch.h"
-#import "NSArray+NSArray_AAAdditions.h"
+#import "NSArray+AAAdditions.h"
 
 @interface ResultsViewController ()
 
@@ -43,6 +43,8 @@
     NSString *caption = [results verboseResults];
     UILabel *label = [[UILabel alloc] initWithFrame:[[self view] frame]];
     [label setText:caption];
+    [label setLineBreakMode:NSLineBreakByWordWrapping];
+    [label setNumberOfLines:0];
     [label setTextColor:[UIColor yellowColor]];
     [label setBackgroundColor:[UIColor redColor]];
     [[self view] addSubview:label];

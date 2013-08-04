@@ -13,13 +13,14 @@
 
 @property NSMutableDictionary *results;
 @property NSString *apiVersion;
+@property NSString *searchString;
 
 - (id) initWithResultString:(NSString *)resultString;
 - (id) initWithResultData:(NSData *)resultData;
 
-- (NSMutableDictionary *) resultsByRating;
 - (NSString *) verboseResults;
-
+- (NSNumber *) highestRating;
+- (UIImage *) highestRatingImage;
 
 @end
 

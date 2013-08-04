@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSArray (NSArray_AAAdditions)
+@interface NSArray (AAAdditions)
 
-- (NSString *) asNaturalLanguageString;
+- (NSString *) verboseJoin;
 
 @end

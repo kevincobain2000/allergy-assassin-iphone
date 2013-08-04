@@ -14,8 +14,8 @@
 		434A2B4E17861BA500FD3504 /* AllergyAssassinSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B4C17861BA500FD3504 /* AllergyAssassinSearch.m */; };
 		434A2B511789D5BF00FD3504 /* ResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B501789D5BF00FD3504 /* ResultsViewController.m */; };
 		434A2B521789D5BF00FD3504 /* ResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B501789D5BF00FD3504 /* ResultsViewController.m */; };
-		434A2B551789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B541789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m */; };
-		434A2B561789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B541789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m */; };
+		434A2B551789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B541789D7C600FD3504 /* NSArray+AAAdditions.m */; };
+		434A2B561789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B541789D7C600FD3504 /* NSArray+AAAdditions.m */; };
 		43EE2ED11778EB9B00E36AE6 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EE2ED01778EB9B00E36AE6 /* SearchViewController.m */; };
 		CC5D9A09172D41850034C89A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A08172D41850034C89A /* UIKit.framework */; };
 		CC5D9A0B172D41850034C89A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A0A172D41850034C89A /* Foundation.framework */; };
@@ -54,8 +54,8 @@
 		434A2B4C17861BA500FD3504 /* AllergyAssassinSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllergyAssassinSearch.m; sourceTree = "<group>"; };
 		434A2B4F1789D5BF00FD3504 /* ResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultsViewController.h; sourceTree = "<group>"; };
 		434A2B501789D5BF00FD3504 /* ResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultsViewController.m; sourceTree = "<group>"; };
-		434A2B531789D7C600FD3504 /* NSArray+NSArray_AAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+NSArray_AAAdditions.h"; sourceTree = "<group>"; };
-		434A2B541789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+NSArray_AAAdditions.m"; sourceTree = "<group>"; };
+		434A2B531789D7C600FD3504 /* NSArray+AAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+AAAdditions.h"; sourceTree = "<group>"; };
+		434A2B541789D7C600FD3504 /* NSArray+AAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+AAAdditions.m"; sourceTree = "<group>"; };
 		43EE2ECF1778EB9B00E36AE6 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		43EE2ED01778EB9B00E36AE6 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		CC5D9A05172D41850034C89A /* Allergy Assassin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Allergy Assassin.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,8 +120,8 @@
 		434A2B571789D7CA00FD3504 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				434A2B531789D7C600FD3504 /* NSArray+NSArray_AAAdditions.h */,
-				434A2B541789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m */,
+				434A2B531789D7C600FD3504 /* NSArray+AAAdditions.h */,
+				434A2B541789D7C600FD3504 /* NSArray+AAAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -346,7 +346,7 @@
 				434A2B441785CD5E00FD3504 /* AddAllergyViewController.m in Sources */,
 				434A2B4D17861BA500FD3504 /* AllergyAssassinSearch.m in Sources */,
 				434A2B511789D5BF00FD3504 /* ResultsViewController.m in Sources */,
-				434A2B551789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m in Sources */,
+				434A2B551789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +358,7 @@
 				434A2B451785CD5E00FD3504 /* AddAllergyViewController.m in Sources */,
 				434A2B4E17861BA500FD3504 /* AllergyAssassinSearch.m in Sources */,
 				434A2B521789D5BF00FD3504 /* ResultsViewController.m in Sources */,
-				434A2B561789D7C600FD3504 /* NSArray+NSArray_AAAdditions.m in Sources */,
+				434A2B561789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

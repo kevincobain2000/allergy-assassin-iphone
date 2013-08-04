@@ -27,8 +27,9 @@
 - (id) initWithAllergies:(Allergies *) theAllergies {
     self = [super init];
     if (self != nil) {
-        self.allergies = theAllergies;
-        self.someAllergies = [Allergies typicalAllergiesList];
+        allergies = theAllergies;
+        someAllergies = [Allergies typicalAllergiesList];
+
         self.title = @"Add Allergy";
         
         searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 72)];
@@ -69,7 +70,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //TODO
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -95,6 +95,24 @@
 # pragma mark UISearchBarDelegate methods
 - (void) searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:YES animated:YES];
+}
+
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    
+    if ([searchText length] == 0) {
+        someAllergies = [Allergies typicalAllergiesList];
+    } else {
+        someAllergies = [[Allergies typicalAllergiesList] filteredArrayUsingPredicate:
+            [NSPredicate predicateWithBlock:^BOOL(id allergyString, NSDictionary *bindings) {
+                    NSRange rangeResult = [(NSString *) allergyString rangeOfString:searchText options:NSCaseInsensitiveSearch];
+                    return rangeResult.location != NSNotFound;
+                }
+        ]];
+        someAllergies = [someAllergies arrayByAddingObject:searchText];
+
+    };
+    
+    [self.tableView reloadData];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {

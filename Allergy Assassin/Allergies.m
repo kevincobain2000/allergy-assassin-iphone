@@ -30,19 +30,22 @@ NSString* const allergiesKey = @"allergies";
 - (id) initWithAllergies: (NSArray *) providedAllergies {
     self  = [super init];
     defaults = [NSUserDefaults standardUserDefaults];
+    allergies = [[NSMutableArray alloc] initWithArray: [self loadAllergies]];
     
     if ([providedAllergies count] > 0) {
-        allergies = [[NSMutableArray alloc] initWithArray:providedAllergies];
-    } else {
-        allergies = [[NSMutableArray alloc] init];
+        [allergies addObjectsFromArray:providedAllergies];
+        [self saveAllergies];
     }
     
-    [self saveAllergies];
     return self;
 }
 
 - (NSSet *) getAllergies {
     return [[NSSet alloc] initWithArray:(NSArray *)allergies];
+}
+
+- (NSArray *) loadAllergies {
+    return [defaults objectForKey:allergiesKey];
 }
 
 - (void) saveAllergies {
@@ -68,7 +71,6 @@ NSString* const allergiesKey = @"allergies";
              @"egg",
              @"garlic",
              @"gluten",
-             @"kidney beans",
              @"lime",
              @"milk",
              @"nut",
