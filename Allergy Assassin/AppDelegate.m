@@ -19,14 +19,17 @@
     
     UINavigationController *allergiesViewController =
         [[AllergiesViewController alloc] init];
+    [allergiesViewController setTabBarItem: [[UITabBarItem alloc] initWithTitle:@"Allergies" image:[UIImage imageNamed:@"man"] tag:0]];
     
     UINavigationController *searchViewController =
         [[SearchViewController alloc] init];
+    [searchViewController setTabBarItem:
+        [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:1]];
     
     UINavigationController *aboutViewController =
         [[UINavigationController alloc] init];
-    aboutViewController.title = @"About";
-
+    [aboutViewController setTabBarItem: [[UITabBarItem alloc] initWithTitle:@"About" image:[UIImage imageNamed:@"lightbulb"] tag:2]];
+    
     UIViewController *rootViewController;
     
     switch (UI_USER_INTERFACE_IDIOM()) {

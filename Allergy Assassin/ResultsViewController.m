@@ -14,12 +14,22 @@
 
 @property AllergyAssassinResults *results;
 @property NSMutableDictionary *ratings;
+@property UIActivityIndicatorView *spinner;
 
 @end
 
 @implementation ResultsViewController
 
 @synthesize results;
+@synthesize spinner;
+
+- (id) init {
+    self = [super init];
+    if (self != nil) {
+        spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    }
+    return self;
+}
 
 - (id) initWithResults: (AllergyAssassinResults *) theResults {
     self = [self init];
@@ -29,25 +39,53 @@
     return self;
 }
 
+- (void) viewWillAppear:(BOOL) animated {
+    [super viewWillAppear:animated];
+    [self showThrobber];
+} 
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[self navigationController] popToRootViewControllerAnimated:NO];
+}
+
+- (void) showThrobber {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [spinner startAnimating];
+    spinner.center = [[self view] center];
+    [[self view] addSubview:spinner];
+}
+
+- (void) hideThrobber {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [spinner removeFromSuperview];
+}
+
 
 - (void) receiveResults:(AllergyAssassinResults *)theResults {
+    [self hideThrobber];
     results = theResults;
     [self processResults];
 }
 
 - (void) receiveError:(NSError *) error {
+    [self hideThrobber];
     NSLog(@"It's all gone Pete Tong.");
 }
 
 - (void) processResults {
+    //UIScrollView *scrollView = [[UIScrollView alloc] init];
+    UIView *scrollView = [self view];
+    
     NSString *caption = [results verboseResults];
     UILabel *label = [[UILabel alloc] initWithFrame:[[self view] frame]];
     [label setText:caption];
     [label setLineBreakMode:NSLineBreakByWordWrapping];
     [label setNumberOfLines:0];
-    [label setTextColor:[UIColor yellowColor]];
-    [label setBackgroundColor:[UIColor redColor]];
-    [[self view] addSubview:label];
+    [scrollView addSubview: [[UIImageView alloc] initWithImage:[results highestRatingImage]]];
+    [scrollView addSubview:label];
+    
+   // [[self view] addSubview:scrollView];
     
 }
 

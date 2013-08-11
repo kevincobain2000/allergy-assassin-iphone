@@ -68,6 +68,11 @@ const NSString *aaSearchPath = @"http://api.allergyassassin.com/search";
 
 @property NSDictionary *resultsByRating;
 
+@property NSNumber *unknownRating;
+@property NSArray *unsafeRatings;
+@property NSArray *safeRatings;
+@property NSArray *warningRatings;
+
 @end
 
 @implementation AllergyAssassinResults
@@ -76,6 +81,11 @@ const NSString *aaSearchPath = @"http://api.allergyassassin.com/search";
 @synthesize apiVersion;
 @synthesize resultsByRating;
 @synthesize searchString;
+
+@synthesize  unknownRating;
+@synthesize  unsafeRatings;
+@synthesize  safeRatings;
+@synthesize  warningRatings;
 
 const NSUInteger numRatings = 6;  //number of different rating numbers
 
@@ -119,8 +129,16 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
 }
 
 - (UIImage *) highestRatingImage {
-    //TODO
-    return nil;
+    NSNumber *highestRating = [self highestRating];
+    if (highestRating == unknownRating) {
+        return [UIImage imageNamed:@"question mark.png"];
+    } else if ([safeRatings containsObject:highestRating]) {
+        return [UIImage imageNamed:@"check mark.png"];
+    } else if ([warningRatings containsObject:highestRating]) {
+        return [UIImage imageNamed:@"caution.png"];
+    } else if ([unsafeRatings containsObject:highestRating]) {
+        return [UIImage imageNamed:@"stop.png"];
+    } else return nil;
 }
 
 - (NSString *) verboseResults {
@@ -130,13 +148,14 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
                          @1: [NSString stringWithFormat:@"%@ is probably safe to eat because it usually does not contain ", searchString],
                          @2: [NSString stringWithFormat:@"%@ is probably safe to eat because it usually does not contain ", searchString],
                          @3: [NSString stringWithFormat:@"%@ may be safe to eat, but sometimes contains ", searchString],
-                         @4: [NSString stringWithFormat:@"%@ may be safe to eat, sometimes contains ", searchString],
+                         @4: [NSString stringWithFormat:@"%@ may be safe to eat, but sometimes contains ", searchString],
                          @5: [NSString stringWithFormat:@"%@ is probably NOT safe to eat, because it usually does contain ", searchString],
                          @0: @" No record of this dish found!"};
     
-    NSNumber *unknownRating = @0;
-    NSArray *unsafeRatings = @[@3, @4, @5];
-    NSArray *safeRatings = @[@1, @2];
+    unknownRating = @0;
+    unsafeRatings = @[@3, @4, @5];
+    safeRatings = @[@1, @2];
+    warningRatings = @[@3, @4];
 
     if ([[resultsByRating objectForKey:unknownRating] count] > 0) {
         // no record of searched recipe
@@ -176,7 +195,9 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
         }
     }
     
-    return resultString;
+    //return str with capitalised first letter
+    return [resultString stringByReplacingCharactersInRange:NSMakeRange(0,1)
+                                        withString:[[resultString substringToIndex:1] capitalizedString]];    
 }
 
 @end

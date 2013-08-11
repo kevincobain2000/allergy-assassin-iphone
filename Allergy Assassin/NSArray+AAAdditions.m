@@ -16,7 +16,7 @@
         NSArray *head = [self subarrayWithRange:(NSMakeRange(0, [self count]-1))];
         NSString *last = [NSString stringWithFormat: @"%@.", [self lastObject]];
         
-        return [@[[head componentsJoinedByString:@", "], @" and", last] componentsJoinedByString:@" "];
+        return [@[[head componentsJoinedByString:@", "], @"and", last] componentsJoinedByString:@" "];
     } else {
         return [NSString stringWithFormat: @"%@.", self[0]];
     }
