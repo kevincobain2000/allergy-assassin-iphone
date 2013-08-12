@@ -27,6 +27,7 @@
     self = [super init];
     if (self != nil) {
         spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [[self view] setBackgroundColor:[UIColor whiteColor]];
     }
     return self;
 }
@@ -74,18 +75,26 @@
 }
 
 - (void) processResults {
-    //UIScrollView *scrollView = [[UIScrollView alloc] init];
-    UIView *scrollView = [self view];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:[[self view] frame]];
+    scrollView.bounces = YES;
+    scrollView.scrollEnabled = YES;	
     
     NSString *caption = [results verboseResults];
-    UILabel *label = [[UILabel alloc] initWithFrame:[[self view] frame]];
+    UILabel *label = [[UILabel alloc] init];
+    label.frame = CGRectMake(0, 260, [[self view] frame].size.width, 60);
     [label setText:caption];
     [label setLineBreakMode:NSLineBreakByWordWrapping];
+    label.textAlignment = NSTextAlignmentCenter;
     [label setNumberOfLines:0];
-    [scrollView addSubview: [[UIImageView alloc] initWithImage:[results highestRatingImage]]];
     [scrollView addSubview:label];
+
+    UIImageView *image = [[UIImageView alloc] initWithImage:[results highestRatingImage]];
+    image.frame = CGRectMake(10,10, 250, 250);
+    image.center = CGPointMake([[self view] center].x, ([image bounds].size.height/2)+10);
+    [scrollView addSubview:image];
     
-   // [[self view] addSubview:scrollView];
+    
+    [[self view] addSubview:scrollView];
     
 }
 
