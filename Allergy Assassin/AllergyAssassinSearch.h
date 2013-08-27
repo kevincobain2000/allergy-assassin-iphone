@@ -30,4 +30,6 @@
 - (id) initWithAllergies:(Allergies *) theAllergies;
 - (void) searchForDish:(NSString *)dishName andOnResults:(void(^)(AllergyAssassinResults *results))successBlock andOnFailure:(void(^) (NSError *error)) errorBlock;
 
++ (NSString *) disclaimer;
+
 @end

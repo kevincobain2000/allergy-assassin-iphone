@@ -36,6 +36,10 @@ const NSString *aaSearchPath = @"http://api.allergyassassin.com/search";
     return self;
 }
 
++ (NSString *) disclaimer {
+    return @"The ratings provided by Allergy Assassin are meant as a general guide, NOT a rock-solid indicator. If you are concerned about the contents of a dish, be sure to consult the chef or avoid the food entirely.";
+}
+
 - (void) searchForDish:(NSString *)dishName
           andOnResults:(void(^)(AllergyAssassinResults *results))successBlock
           andOnFailure:(void(^)(NSError *))errorBlock {

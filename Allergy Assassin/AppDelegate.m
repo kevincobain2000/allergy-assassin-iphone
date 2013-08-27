@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "AllergiesViewController.h"
 #import "SearchViewController.h"
+#import "AboutViewController.h"
 
 
 @implementation AppDelegate
@@ -27,7 +28,7 @@
         [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemSearch tag:1]];
     
     UINavigationController *aboutViewController =
-        [[UINavigationController alloc] init];
+        [[AboutViewController alloc] init];
     [aboutViewController setTabBarItem: [[UITabBarItem alloc] initWithTitle:@"About" image:[UIImage imageNamed:@"lightbulb"] tag:2]];
     
     UIViewController *rootViewController;

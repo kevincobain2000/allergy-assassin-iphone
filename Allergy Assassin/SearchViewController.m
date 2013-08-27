@@ -19,6 +19,7 @@
 }
 @property (retain) AllergyAssassinSearch *aaSearch;
 @property (retain) Allergies *allergies;
+@property (retain) NSArray *warningControls;
 
 
 - (id) init;
@@ -39,18 +40,6 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 @end
 
 
@@ -58,17 +47,46 @@
 
 @synthesize aaSearch;
 @synthesize allergies;
+@synthesize warningControls;
 
 - (id) init {
     self = [super init];
-    self.title = @"Search";
     
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,70,320,44)];
-    searchBar.delegate = self;
-    searchBar.placeholder = @"Enter Dish Name";
-    
-    [self.tableView setTableHeaderView:searchBar];
+    if (self != nil) {
+        self.title = @"Search";
+        
+        UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,70,320,44)];
+        searchBar.delegate = self;
+        searchBar.placeholder = @"Enter Dish Name";
+        
+        [self.tableView setTableHeaderView:searchBar];
+        
+        [self showInfo];
+    }
     return self;
+}
+
+- (void) showInfo {
+    UIImageView *infoImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"info.png"]];
+    
+    infoImage.frame = CGRectMake(0,0, 35, 35);
+    infoImage.center = CGPointMake([[self view] center].x, [[self view] frame].origin.y + infoImage.frame.size.width+10);
+    
+    UITextView *infoText = [[UITextView alloc] initWithFrame:CGRectMake(0,0,[[self view] frame].size.width, 90)];
+    infoText.center = CGPointMake(infoImage.center.x, infoImage.center.y + 70);
+    [infoText setBackgroundColor:[UIColor whiteColor]];
+    [infoText setTextAlignment:NSTextAlignmentCenter];
+    [infoText setText:[AllergyAssassinSearch disclaimer]];
+    
+    warningControls = @[infoImage, infoText];
+    [[self view] addSubview:infoImage];
+    [[self view] addSubview:infoText];
+}
+
+- (void) hideInfo {
+    for (UIView *control in warningControls) {
+        [control removeFromSuperview];
+    }
 }
 
 - (void) searchForDish: (NSString *) dish {
@@ -86,6 +104,7 @@
 
 # pragma mark UISearchBarDelegate methods
 - (void) searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [self hideInfo];
     [searchBar setShowsCancelButton:YES animated:YES];
 }
 
