@@ -18,12 +18,14 @@
 - (void) loadView {
     [super loadView];
     
+    [[self view] setBackgroundColor:[UIColor whiteColor]];
+    
     UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"applogo.png"]];
     [logo setFrame:CGRectMake(0,0,
                               MIN([[self view] frame].size.width*0.75, [logo frame].size.width),
                               MIN([[self view] frame].size.width*0.75
                                   , [logo frame].size.width))];
-    logo.center = CGPointMake([[self view] frame].size.width/2, logo.center.y);
+    [logo setCenter:CGPointMake([[self view] frame].size.width/2, logo.center.y)];
     
     UITextView *url = [[UITextView alloc] initWithFrame:
         CGRectMake(0, 0,

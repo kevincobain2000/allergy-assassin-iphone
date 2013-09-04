@@ -9,6 +9,7 @@
 #import "SearchViewController.h"
 #import "ResultsViewController.h"
 #import "AllergyAssassinSearch.h"
+#import "AboutViewController.h"
 
 @interface SearchViewController ()
 
@@ -51,7 +52,6 @@
 
 - (id) init {
     self = [super init];
-    
     if (self != nil) {
         self.title = @"Search";
         
@@ -61,20 +61,39 @@
         
         [self.tableView setTableHeaderView:searchBar];
         
-        [self showInfo];
     }
+    
     return self;
+}
+
+- (void) viewDidLoad {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        // info button in pad interface
+        UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+        [infoButton addTarget:self action:@selector(infoButtonWasPressed) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+    }
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self showInfo];
 }
 
 - (void) showInfo {
     UIImageView *infoImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"info.png"]];
     
     infoImage.frame = CGRectMake(0,0, 35, 35);
-    infoImage.center = CGPointMake([[self view] center].x, [[self view] frame].origin.y + infoImage.frame.size.width+10);
+    infoImage.center = CGPointMake([[self view] center].x, [self.tableView frame].origin.y + infoImage.frame.size.width+10);
     
-    UITextView *infoText = [[UITextView alloc] initWithFrame:CGRectMake(0,0,[[self view] frame].size.width, 90)];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        //for some reason, pad interface does not include search bar in height calculation
+        [infoImage setCenter:CGPointMake(infoImage.center.x, infoImage.center.y+18)];
+    }
+    
+    UITextView *infoText = [[UITextView alloc] initWithFrame:CGRectMake(0,0,[[self tableView] frame].size.width, 90)];
     infoText.center = CGPointMake(infoImage.center.x, infoImage.center.y + 70);
-    [infoText setBackgroundColor:[UIColor whiteColor]];
+        
     [infoText setTextAlignment:NSTextAlignmentCenter];
     [infoText setText:[AllergyAssassinSearch disclaimer]];
     
@@ -100,6 +119,24 @@
         [resultsView receiveError:error];
     }];
     
+}
+
+- (void) infoButtonWasPressed {
+    UIViewController *aboutViewController = [[AboutViewController alloc] init];
+
+    UIToolbar *toolBar;
+    toolBar = [[UIToolbar alloc] init];
+    [toolBar sizeToFit];
+    [toolBar setItems:@[
+            [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+            [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(closeModalView)]]];
+    [aboutViewController.view addSubview:toolBar];
+                        
+    [self.parentViewController.parentViewController presentViewController:aboutViewController animated:YES completion:nil];
+}
+
+- (void) closeModalView {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark UISearchBarDelegate methods
