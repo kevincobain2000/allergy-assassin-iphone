@@ -20,5 +20,6 @@ NSString* const allergiesKey;
 - (void) removeAllergy:(NSString *) allergy;
 
 + (NSArray *) typicalAllergiesList;
++ (NSArray *) recipeList;
 
 @end

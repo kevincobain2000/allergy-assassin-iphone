@@ -15,31 +15,43 @@
 
 @implementation AboutViewController
 
-- (void) loadView {
-    [super loadView];
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    /*  not the ideal method to use for laying stuff out, but before this point
+     * UI dimensions seem to be incorrectly reported in portrait instead of landscape?
+     * Copious googling didn't glean any results, investigate further in future. */
+    
+    CGRect viewFrame = [[self view] frame];
+    
+    if ([[[self view] subviews] count]) {
+        //we have a toolbar, resize reported viewFrame to take it into account
+        viewFrame.origin.y = viewFrame.origin.y + 44;
+    }
+    
+    CGPoint frameCentre = [[self view] center];
     
     [[self view] setBackgroundColor:[UIColor whiteColor]];
     
     UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"applogo.png"]];
-    [logo setFrame:CGRectMake(0,0,
-                              MIN([[self view] frame].size.width*0.75, [logo frame].size.width),
-                              MIN([[self view] frame].size.width*0.75
-                                  , [logo frame].size.width))];
-    [logo setCenter:CGPointMake([[self view] frame].size.width/2, logo.center.y)];
+    [logo setFrame:CGRectMake(viewFrame.origin.x, viewFrame.origin.y,
+                              MIN(viewFrame.size.width*0.75, [logo frame].size.width),
+                              MIN(viewFrame.size.width*0.75, [logo frame].size.width))];
+    [logo setCenter:CGPointMake(viewFrame.size.width/2, logo.center.y)];
+
     
     UITextView *url = [[UITextView alloc] initWithFrame:
-        CGRectMake(0, 0,
-                   [self view].frame.size.width, 80)];
+        CGRectMake(viewFrame.origin.x, [logo frame].origin.y + [logo frame].size.height,
+                   viewFrame.size.width, 80)];
     [url setText:@"http://allergyassassin.com"];
     [url setTextAlignment:NSTextAlignmentCenter];
-    [url setCenter:CGPointMake([[self view] center].x, [logo frame].size.height+45)];
     url.editable = NO;
     [url setDataDetectorTypes:UIDataDetectorTypeLink];
     
     UITextView *description = [[UITextView alloc]
         initWithFrame:CGRectMake(0,
                                  [url frame].origin.y + 25,
-                                 [self view].frame.size.width,
+                                 viewFrame.size.width,
                                  30)];
     [description setTextAlignment:NSTextAlignmentCenter];
     [description setText:[NSString stringWithFormat:@" v%@ by Matt Jackson",
@@ -49,12 +61,12 @@
     
     UIImageView *infoIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"info.png"]];
     [infoIcon setFrame:CGRectMake(0, [description frame].origin.y + 35,
-                                  [[self view] frame].size.width , 30)];
+                                  viewFrame.size.width , 30)];
     [infoIcon setContentMode:UIViewContentModeScaleAspectFit];
     
     UITextView *infoText = [[UITextView alloc]
         initWithFrame:CGRectMake(0,[infoIcon frame].origin.y + 30,
-                                 [[self view] frame].size.width, 120)];
+                                 viewFrame.size.width, 120)];
     [infoText setText:[AllergyAssassinSearch disclaimer]];
     [infoText setTextAlignment:NSTextAlignmentCenter];
     infoText.editable = NO;

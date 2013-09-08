@@ -10,17 +10,19 @@
 #import "ResultsViewController.h"
 #import "AllergyAssassinSearch.h"
 #import "AboutViewController.h"
+#import "Allergies.h"
 
 @interface SearchViewController ()
 
 @end
 
 
-@interface SearchInternalViewController: UITableViewController <UISearchBarDelegate> {
+@interface SearchInternalViewController: UITableViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 }
 @property (retain) AllergyAssassinSearch *aaSearch;
 @property (retain) Allergies *allergies;
 @property (retain) NSArray *warningControls;
+@property (retain) NSArray *autocompleteSearch;
 
 
 - (id) init;
@@ -49,6 +51,7 @@
 @synthesize aaSearch;
 @synthesize allergies;
 @synthesize warningControls;
+@synthesize autocompleteSearch;
 
 - (id) init {
     self = [super init];
@@ -60,7 +63,7 @@
         searchBar.placeholder = @"Enter Dish Name";
         
         [self.tableView setTableHeaderView:searchBar];
-        
+                
     }
     
     return self;
@@ -78,18 +81,17 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self showInfo];
+    UISearchBar *searchBar = (UISearchBar *) [self.tableView tableHeaderView];
+    [searchBar setText:@""];
+    autocompleteSearch = @[];
+    [self.tableView reloadData];
 }
 
 - (void) showInfo {
     UIImageView *infoImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"info.png"]];
     
     infoImage.frame = CGRectMake(0,0, 35, 35);
-    infoImage.center = CGPointMake([[self view] center].x, [self.tableView frame].origin.y + infoImage.frame.size.width+10);
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        //for some reason, pad interface does not include search bar in height calculation
-        [infoImage setCenter:CGPointMake(infoImage.center.x, infoImage.center.y+18)];
-    }
+    infoImage.center = CGPointMake([[self view] center].x, [self.tableView frame].origin.y + infoImage.frame.size.height+28);
     
     UITextView *infoText = [[UITextView alloc] initWithFrame:CGRectMake(0,0,[[self tableView] frame].size.width, 90)];
     infoText.center = CGPointMake(infoImage.center.x, infoImage.center.y + 70);
@@ -132,7 +134,7 @@
             [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(closeModalView)]]];
     [aboutViewController.view addSubview:toolBar];
                         
-    [self.parentViewController.parentViewController presentViewController:aboutViewController animated:YES completion:nil];
+    [[[[self view] window] rootViewController] presentViewController:aboutViewController animated:YES completion:nil];
 }
 
 - (void) closeModalView {
@@ -145,12 +147,69 @@
     [searchBar setShowsCancelButton:YES animated:YES];
 }
 
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if ([searchText length] > 0) {
+        autocompleteSearch = [ [Allergies recipeList] filteredArrayUsingPredicate:
+                         [NSPredicate predicateWithBlock:^BOOL(id recipeString, NSDictionary *bindings) {
+            NSRange rangeResult = [(NSString *) recipeString rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            return rangeResult.location != NSNotFound;
+        }
+                          ]];
+        autocompleteSearch = [autocompleteSearch arrayByAddingObject:searchText];
+    } else {
+        autocompleteSearch = @[];
+    }
+    
+    [self.tableView reloadData];
+    
+}
+
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:NO animated:YES];
     [searchBar resignFirstResponder];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    [self searchForDish:[searchBar text]];
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar setText:@""];
+}
+
+#pragma mark UITableViewDatasource methods
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [autocompleteSearch count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    cell.textLabel.text = [autocompleteSearch objectAtIndex:[indexPath item]];
+    
+    return cell;
+}
+
+
+#pragma mark UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UISearchBar *searchBar = (UISearchBar *) [tableView tableHeaderView];
+    
     [searchBar resignFirstResponder];
     [self searchForDish:[searchBar text]];
     [searchBar setShowsCancelButton:NO animated:YES];
