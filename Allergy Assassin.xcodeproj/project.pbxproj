@@ -51,6 +51,9 @@
 		43770A8D17C789B800ED186D /* applogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 43770A8B17C789B800ED186D /* applogo.png */; };
 		43A9198517CCC12300A4ADAD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A9198417CCC12300A4ADAD /* QuartzCore.framework */; };
 		43A9198717CCC12900A4ADAD /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A9198617CCC12900A4ADAD /* CFNetwork.framework */; };
+		43B4208C17DCBA30006CFADF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B4208B17DCBA30006CFADF /* SystemConfiguration.framework */; };
+		43B4209017DCBA7E006CFADF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B4208F17DCBA7E006CFADF /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		43B4209117DCBA7E006CFADF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 43B4208F17DCBA7E006CFADF /* Reachability.m */; };
 		43EE2ED11778EB9B00E36AE6 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EE2ED01778EB9B00E36AE6 /* SearchViewController.m */; };
 		CC5D9A09172D41850034C89A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A08172D41850034C89A /* UIKit.framework */; };
 		CC5D9A0B172D41850034C89A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC5D9A0A172D41850034C89A /* Foundation.framework */; };
@@ -112,6 +115,9 @@
 		43770A8B17C789B800ED186D /* applogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = applogo.png; sourceTree = "<group>"; };
 		43A9198417CCC12300A4ADAD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		43A9198617CCC12900A4ADAD /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		43B4208B17DCBA30006CFADF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		43B4208E17DCBA7E006CFADF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		43B4208F17DCBA7E006CFADF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		43EE2ECF1778EB9B00E36AE6 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		43EE2ED01778EB9B00E36AE6 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		CC5D9A05172D41850034C89A /* Allergy Assassin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Allergy Assassin.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,6 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43B4208C17DCBA30006CFADF /* SystemConfiguration.framework in Frameworks */,
 				43A9198717CCC12900A4ADAD /* CFNetwork.framework in Frameworks */,
 				43A9198517CCC12300A4ADAD /* QuartzCore.framework in Frameworks */,
 				CC5D9A09172D41850034C89A /* UIKit.framework in Frameworks */,
@@ -189,6 +196,15 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		43B4208D17DCBA4C006CFADF /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				43B4208E17DCBA7E006CFADF /* Reachability.h */,
+				43B4208F17DCBA7E006CFADF /* Reachability.m */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
 		CC5D99FC172D41850034C89A = {
 			isa = PBXGroup;
 			children = (
@@ -203,6 +219,7 @@
 				430C2F9B17B97ACD0075EE05 /* Default-568h@2x.png */,
 				430C2F9917B97AA00075EE05 /* Default@2x.png */,
 				430C2F9717B97A9B0075EE05 /* Default.png */,
+				43B4208D17DCBA4C006CFADF /* Libraries */,
 				CC5D9A0E172D41850034C89A /* Allergy Assassin */,
 				CC5D9A2C172D41860034C89A /* Allergy AssassinTests */,
 				CC5D9A07172D41850034C89A /* Frameworks */,
@@ -222,6 +239,7 @@
 		CC5D9A07172D41850034C89A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43B4208B17DCBA30006CFADF /* SystemConfiguration.framework */,
 				43A9198617CCC12900A4ADAD /* CFNetwork.framework */,
 				43A9198417CCC12300A4ADAD /* QuartzCore.framework */,
 				CC5D9A08172D41850034C89A /* UIKit.framework */,
@@ -452,6 +470,7 @@
 				434A2B511789D5BF00FD3504 /* ResultsViewController.m in Sources */,
 				434A2B551789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */,
 				43770A8917C0F1E700ED186D /* AboutViewController.m in Sources */,
+				43B4209017DCBA7E006CFADF /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,6 +484,7 @@
 				434A2B521789D5BF00FD3504 /* ResultsViewController.m in Sources */,
 				434A2B561789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */,
 				43770A8A17C0F1E700ED186D /* AboutViewController.m in Sources */,
+				43B4209117DCBA7E006CFADF /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

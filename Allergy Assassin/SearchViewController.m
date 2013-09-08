@@ -11,6 +11,8 @@
 #import "AllergyAssassinSearch.h"
 #import "AboutViewController.h"
 #import "Allergies.h"
+#import "Reachability.h"
+
 
 @interface SearchViewController ()
 
