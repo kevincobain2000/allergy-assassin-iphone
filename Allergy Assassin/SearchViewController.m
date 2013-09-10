@@ -25,6 +25,8 @@
 @property (retain) Allergies *allergies;
 @property (retain) NSArray *warningControls;
 @property (retain) NSArray *autocompleteSearch;
+@property (assign) BOOL viewIsDisabled;
+@property (retain) UIView *disableOverlay;
 
 
 - (id) init;
@@ -54,12 +56,15 @@
 @synthesize allergies;
 @synthesize warningControls;
 @synthesize autocompleteSearch;
+@synthesize viewIsDisabled;
+@synthesize disableOverlay;
 
 - (id) init {
     self = [super init];
     if (self != nil) {
         self.title = @"Search";
         
+        viewIsDisabled = NO;
         UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,70,320,44)];
         searchBar.delegate = self;
         searchBar.placeholder = @"Enter Dish Name";
@@ -71,7 +76,17 @@
     return self;
 }
 
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void) viewDidLoad {
+    
+
+    
+    Reachability *reachabilityInfo;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkReachability) name:kReachabilityChangedNotification object:reachabilityInfo];
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         // info button in pad interface
         UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
@@ -87,6 +102,15 @@
     [searchBar setText:@""];
     autocompleteSearch = @[];
     [self.tableView reloadData];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    disableOverlay = [[UIView alloc] initWithFrame:[[self view] frame]];
+    [disableOverlay setBackgroundColor:[UIColor blackColor]];
+    [disableOverlay setAlpha:0.0f];
+    [[self view] addSubview:disableOverlay];
 }
 
 - (void) showInfo {
@@ -112,6 +136,27 @@
     }
 }
 
+- (void) checkReachability {
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
+    
+    if (networkStatus == NotReachable) {
+        [self disableView];
+    } else if (viewIsDisabled) {
+        [self enableView];
+    }
+}
+
+- (void) disableView {
+    [UIView animateWithDuration:0.25f animations:^{ [disableOverlay setAlpha:0.7f]; }];
+    viewIsDisabled = YES;
+}
+
+- (void) enableView {
+    [UIView animateWithDuration:0.25f animations:^{ [disableOverlay setAlpha:0.0f]; }];
+    viewIsDisabled = NO;
+}
+
 - (void) searchForDish: (NSString *) dish {
     aaSearch = [[AllergyAssassinSearch alloc] init];
     ResultsViewController *resultsView = [[ResultsViewController alloc] init];
@@ -126,6 +171,7 @@
 }
 
 - (void) infoButtonWasPressed {
+    
     UIViewController *aboutViewController = [[AboutViewController alloc] init];
 
     UIToolbar *toolBar;
