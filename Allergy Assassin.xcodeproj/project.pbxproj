@@ -35,6 +35,8 @@
 		430C2FB417B9807F0075EE05 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 430C2FB317B9807F0075EE05 /* Default-Portrait@2x~ipad.png */; };
 		430C2FB617B981250075EE05 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 430C2FB517B981250075EE05 /* Default-Landscape@2x~ipad.png */; };
 		430C2FB817B9812C0075EE05 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 430C2FB717B9812C0075EE05 /* Default-Landscape~ipad.png */; };
+		431E18A417DFAC3A008E420E /* MJFancyOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 431E18A317DFAC3A008E420E /* MJFancyOverlayView.m */; };
+		431E18A517DFAC3A008E420E /* MJFancyOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 431E18A317DFAC3A008E420E /* MJFancyOverlayView.m */; };
 		434A2B441785CD5E00FD3504 /* AddAllergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B431785CD5E00FD3504 /* AddAllergyViewController.m */; };
 		434A2B451785CD5E00FD3504 /* AddAllergyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B431785CD5E00FD3504 /* AddAllergyViewController.m */; };
 		434A2B4D17861BA500FD3504 /* AllergyAssassinSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 434A2B4C17861BA500FD3504 /* AllergyAssassinSearch.m */; };
@@ -100,6 +102,8 @@
 		430C2FB317B9807F0075EE05 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		430C2FB517B981250075EE05 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		430C2FB717B9812C0075EE05 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		431E18A217DFAC3A008E420E /* MJFancyOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJFancyOverlayView.h; sourceTree = "<group>"; };
+		431E18A317DFAC3A008E420E /* MJFancyOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJFancyOverlayView.m; sourceTree = "<group>"; };
 		434A2B421785CD5E00FD3504 /* AddAllergyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAllergyViewController.h; sourceTree = "<group>"; };
 		434A2B431785CD5E00FD3504 /* AddAllergyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAllergyViewController.m; sourceTree = "<group>"; };
 		434A2B4B17861BA500FD3504 /* AllergyAssassinSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllergyAssassinSearch.h; sourceTree = "<group>"; };
@@ -318,6 +322,8 @@
 				434A2B501789D5BF00FD3504 /* ResultsViewController.m */,
 				43770A8717C0F1E700ED186D /* AboutViewController.h */,
 				43770A8817C0F1E700ED186D /* AboutViewController.m */,
+				431E18A217DFAC3A008E420E /* MJFancyOverlayView.h */,
+				431E18A317DFAC3A008E420E /* MJFancyOverlayView.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -471,6 +477,7 @@
 				434A2B551789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */,
 				43770A8917C0F1E700ED186D /* AboutViewController.m in Sources */,
 				43B4209017DCBA7E006CFADF /* Reachability.m in Sources */,
+				431E18A417DFAC3A008E420E /* MJFancyOverlayView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +492,7 @@
 				434A2B561789D7C600FD3504 /* NSArray+AAAdditions.m in Sources */,
 				43770A8A17C0F1E700ED186D /* AboutViewController.m in Sources */,
 				43B4209117DCBA7E006CFADF /* Reachability.m in Sources */,
+				431E18A517DFAC3A008E420E /* MJFancyOverlayView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

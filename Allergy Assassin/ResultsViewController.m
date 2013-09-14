@@ -9,12 +9,14 @@
 #import "ResultsViewController.h"
 #import "AllergyAssassinSearch.h"
 #import "NSArray+AAAdditions.h"
+#import "MJFancyOverlayView.h"
 
 @interface ResultsViewController ()
 
 @property AllergyAssassinResults *results;
 @property NSMutableDictionary *ratings;
 @property UIActivityIndicatorView *spinner;
+@property MJFancyOverlayView *overlay;
 
 @end
 
@@ -22,6 +24,7 @@
 
 @synthesize results;
 @synthesize spinner;
+@synthesize overlay;
 
 - (id) init {
     self = [super init];
@@ -43,6 +46,9 @@
 - (void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     [self showThrobber];
+    if (overlay == nil) {
+        overlay = [[MJFancyOverlayView alloc] initWithFrame: [[self view] frame] andDelegate:self];
+    }
 } 
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -71,7 +77,12 @@
 
 - (void) receiveError:(NSError *) error {
     [self hideThrobber];
-    NSLog(@"It's all gone Pete Tong.");
+    [overlay showOverlayWithMessage:@"There is a problem with your connection."];
+    [NSTimer scheduledTimerWithTimeInterval:4.0f target:self selector:@selector(closeView) userInfo:nil repeats:NO];
+}
+
+- (void) closeView {
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void) processResults {

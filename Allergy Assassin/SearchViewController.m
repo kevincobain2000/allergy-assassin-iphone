@@ -10,6 +10,7 @@
 #import "ResultsViewController.h"
 #import "AllergyAssassinSearch.h"
 #import "AboutViewController.h"
+#import "MJFancyOverlayView.h"
 #import "Allergies.h"
 #import "Reachability.h"
 
@@ -22,11 +23,10 @@
 @interface SearchInternalViewController: UITableViewController <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
 }
 @property (retain) AllergyAssassinSearch *aaSearch;
-@property (retain) Allergies *allergies;
 @property (retain) NSArray *warningControls;
 @property (retain) NSArray *autocompleteSearch;
-@property (assign) BOOL viewIsDisabled;
-@property (retain) UIView *disableOverlay;
+@property (retain) MJFancyOverlayView *overlay;
+
 
 
 - (id) init;
@@ -53,18 +53,15 @@
 @implementation SearchInternalViewController
 
 @synthesize aaSearch;
-@synthesize allergies;
 @synthesize warningControls;
 @synthesize autocompleteSearch;
-@synthesize viewIsDisabled;
-@synthesize disableOverlay;
+@synthesize overlay;
 
 - (id) init {
     self = [super init];
     if (self != nil) {
         self.title = @"Search";
         
-        viewIsDisabled = NO;
         UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,70,320,44)];
         searchBar.delegate = self;
         searchBar.placeholder = @"Enter Dish Name";
@@ -81,8 +78,6 @@
 }
 
 - (void) viewDidLoad {
-    
-
     
     Reachability *reachabilityInfo;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkReachability) name:kReachabilityChangedNotification object:reachabilityInfo];
@@ -102,18 +97,16 @@
     [searchBar setText:@""];
     autocompleteSearch = @[];
     [self.tableView reloadData];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     
-    disableOverlay = [[UIView alloc] initWithFrame:[[self view] frame]];
-    [disableOverlay setBackgroundColor:[UIColor blackColor]];
-    [disableOverlay setAlpha:0.0f];
-    [[self view] addSubview:disableOverlay];
+    if (overlay == nil) {
+        overlay = [[MJFancyOverlayView alloc] initWithFrame:[[self view] frame] andDelegate:self];
+        [[self view] addSubview:overlay];
+        
+    }
 }
 
 - (void) showInfo {
+    
     UIImageView *infoImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"info.png"]];
     
     infoImage.frame = CGRectMake(0,0, 35, 35);
@@ -141,33 +134,34 @@
     NetworkStatus networkStatus = [reachability currentReachabilityStatus];
     
     if (networkStatus == NotReachable) {
-        [self disableView];
-    } else if (viewIsDisabled) {
-        [self enableView];
+        [overlay showOverlayWithMessage:@"Data is not currently available. Try again later."];
+    } else {
+        [overlay hideOverlay];
     }
 }
 
-- (void) disableView {
-    [UIView animateWithDuration:0.25f animations:^{ [disableOverlay setAlpha:0.7f]; }];
-    viewIsDisabled = YES;
-}
-
-- (void) enableView {
-    [UIView animateWithDuration:0.25f animations:^{ [disableOverlay setAlpha:0.0f]; }];
-    viewIsDisabled = NO;
-}
-
 - (void) searchForDish: (NSString *) dish {
-    aaSearch = [[AllergyAssassinSearch alloc] init];
-    ResultsViewController *resultsView = [[ResultsViewController alloc] init];
-    [self.navigationController pushViewController:resultsView animated:YES];
     
-    [aaSearch searchForDish:dish andOnResults: ^(AllergyAssassinResults *results) {
-        [resultsView receiveResults:results];
-    } andOnFailure:^(NSError *error) {
-        [resultsView receiveError:error];
-    }];
+    NSSet *allergies = [[[Allergies alloc] init] getAllergies];
+    if ([allergies count]==0) {
+        [overlay showOverlayWithMessage:@"No allergies entered!"];
+        [NSTimer scheduledTimerWithTimeInterval:4.0f target:self selector:@selector(hideOverlay) userInfo:nil repeats:NO];
+    } else {
+        aaSearch = [[AllergyAssassinSearch alloc] init];
+        ResultsViewController *resultsView = [[ResultsViewController alloc] init];
+        [self.navigationController pushViewController:resultsView animated:YES];
+        
+        [aaSearch searchForDish:dish andOnResults: ^(AllergyAssassinResults *results) {
+            [resultsView receiveResults:results];
+        } andOnFailure:^(NSError *error) {
+            [resultsView receiveError:error];
+        }];
+    }
     
+}
+
+- (void) hideOverlay {
+    [overlay hideOverlay];
 }
 
 - (void) infoButtonWasPressed {
