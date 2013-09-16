@@ -14,6 +14,7 @@
 @property NSMutableDictionary *results;
 @property NSString *apiVersion;
 @property NSString *searchString;
+@property NSError *error;
 
 - (id) initWithResultString:(NSString *)resultString;
 - (id) initWithResultData:(NSData *)resultData;

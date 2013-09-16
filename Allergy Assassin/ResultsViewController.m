@@ -48,6 +48,7 @@
     [self showThrobber];
     if (overlay == nil) {
         overlay = [[MJFancyOverlayView alloc] initWithFrame: [[self view] frame] andDelegate:self];
+        [[self view] addSubview:overlay];
     }
 } 
 
@@ -77,12 +78,9 @@
 
 - (void) receiveError:(NSError *) error {
     [self hideThrobber];
-    [overlay showOverlayWithMessage:@"There is a problem with your connection."];
-    [NSTimer scheduledTimerWithTimeInterval:4.0f target:self selector:@selector(closeView) userInfo:nil repeats:NO];
-}
-
-- (void) closeView {
-    [[self navigationController] popViewControllerAnimated:YES];
+    [overlay showOverlayWithMessage:@"There is a problem with your connection." andTimeout:4.0f performBlockOnTimeout:^{
+        [[self navigationController] popViewControllerAnimated:YES];
+    }];
 }
 
 - (void) processResults {
@@ -106,7 +104,6 @@
     
     
     [[self view] addSubview:scrollView];
-    
 }
 
 @end

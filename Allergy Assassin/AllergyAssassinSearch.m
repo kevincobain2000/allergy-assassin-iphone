@@ -58,7 +58,11 @@ const NSString *aaSearchPath = @"http://api.allergyassassin.com/search";
         completionHandler: ^(NSURLResponse *response, NSData *responseData, NSError *error) {
             if (error == nil) {
                 AllergyAssassinResults *aaResults = [[AllergyAssassinResults alloc] initWithResultData:responseData];
-                successBlock(aaResults);
+                if ([aaResults error]) {
+                    errorBlock([aaResults error]);
+                } else {
+                    successBlock(aaResults);
+                }
             } else {
                 errorBlock(error);
             }
@@ -85,6 +89,7 @@ const NSString *aaSearchPath = @"http://api.allergyassassin.com/search";
 @synthesize apiVersion;
 @synthesize resultsByRating;
 @synthesize searchString;
+@synthesize error;
 
 @synthesize  unknownRating;
 @synthesize  unsafeRatings;
@@ -102,23 +107,26 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
     if (self != nil) {
         NSError *jsonParsingError = nil;
         NSDictionary *jsonResults = [NSJSONSerialization JSONObjectWithData:resultData options:0 error:&jsonParsingError];
+        error = jsonParsingError;
         
-        apiVersion = [jsonResults objectForKey:@"version"];
-        searchString = [[[jsonResults objectForKey:@"arguments"] objectForKey:@"q"] objectAtIndex:0];
-        results = [[NSMutableDictionary alloc] init];
-        resultsByRating = @{@0: [[NSMutableArray alloc] init],
-                            @1: [[NSMutableArray alloc] init],
-                            @2: [[NSMutableArray alloc] init],
-                            @3: [[NSMutableArray alloc] init],
-                            @4: [[NSMutableArray alloc] init],
-                            @5: [[NSMutableArray alloc] init] };
-                        
-        for (NSDictionary *allergyResult in [jsonResults objectForKey:@"results"]) {
-            [results setObject:[allergyResult objectForKey:@"rating"]
-                        forKey:[allergyResult objectForKey:@"allergy"]];
-            
-            [[resultsByRating objectForKey:[allergyResult objectForKey:@"rating"]]
-                addObject:[allergyResult objectForKey:@"allergy"]];
+        if (!error) {
+            apiVersion = [jsonResults objectForKey:@"version"];
+            searchString = [[[jsonResults objectForKey:@"arguments"] objectForKey:@"q"] objectAtIndex:0];
+            results = [[NSMutableDictionary alloc] init];
+            resultsByRating = @{@0: [[NSMutableArray alloc] init],
+                                @1: [[NSMutableArray alloc] init],
+                                @2: [[NSMutableArray alloc] init],
+                                @3: [[NSMutableArray alloc] init],
+                                @4: [[NSMutableArray alloc] init],
+                                @5: [[NSMutableArray alloc] init] };
+                            
+            for (NSDictionary *allergyResult in [jsonResults objectForKey:@"results"]) {
+                [results setObject:[allergyResult objectForKey:@"rating"]
+                            forKey:[allergyResult objectForKey:@"allergy"]];
+                
+                [[resultsByRating objectForKey:[allergyResult objectForKey:@"rating"]]
+                    addObject:[allergyResult objectForKey:@"allergy"]];
+            }
         }
     }
     return self;

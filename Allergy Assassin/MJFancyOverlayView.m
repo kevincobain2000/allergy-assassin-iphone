@@ -12,7 +12,8 @@
 @interface MJFancyOverlayView ()
 
 @property (retain) UILabel *overlayText;
-@property (assign) UIViewController *delegate;
+@property (retain) UIViewController *delegate;
+@property (nonatomic, copy) void(^timeoutBlock)(void);
 
 @end
 
@@ -21,11 +22,13 @@
 @synthesize overlayText;
 @synthesize overlayShown;
 @synthesize delegate;
+@synthesize timeoutBlock;
 
 - (id) initWithFrame:(CGRect) frame andDelegate:(UIViewController *) theDelegate {
     self = [super initWithFrame:frame];
     delegate = theDelegate;
     [self loadControls];
+    [self addTarget:self action:@selector(receiveTapEvent:) forControlEvents:UIControlEventTouchDown];
     return self;
 }
 
@@ -49,25 +52,27 @@
              [messageFrame frame].origin.x,
              [messageFrame frame].origin.y,
              [messageFrame frame].size.width,
-             [messageFrame frame].size.height * (2.0f/3.0f));
+             [messageFrame frame].size.height * (5.0f/8.0f));
     UILabel *exclaim = [[UILabel alloc] initWithFrame:exclaimFrame];
     [exclaim setBackgroundColor:[UIColor clearColor]];
     [exclaim setTextColor:[UIColor whiteColor]];
     [exclaim setText:@"!"];
     [exclaim setTextAlignment:NSTextAlignmentCenter];
-    [exclaim setFont:[UIFont boldSystemFontOfSize:52]];
+    [exclaim setFont:[UIFont fontWithName:@"AmericanTypewriter-Bold" size:102]];
     [self addSubview:exclaim];  
     
     CGRect overlayTextFrame = CGRectMake(
-            [messageFrame frame].origin.x,
-            [messageFrame frame].origin.y + [messageFrame frame].size.height * (2.0f/3.0f),
-            [messageFrame frame].size.width,
-            [messageFrame frame].size.height * (1.0f/3.0f));
+            [messageFrame frame].origin.x+3,
+            [messageFrame frame].origin.y + [messageFrame frame].size.height * (5.0f/8.0f),
+            [messageFrame frame].size.width-6,
+            [messageFrame frame].size.height * (3.0f/8.0f));
     
     overlayText = [[UILabel alloc] initWithFrame:overlayTextFrame];
     [overlayText setBackgroundColor:[UIColor clearColor]];
     [overlayText setTextColor:[UIColor whiteColor]];
     [overlayText setTextAlignment:NSTextAlignmentCenter];
+    [overlayText setAdjustsFontSizeToFitWidth:YES];
+    [overlayText setNumberOfLines:3];
     [self addSubview:overlayText];
 }
 
@@ -78,9 +83,31 @@
     overlayShown = YES;
 }
 
+- (void) showOverlayWithMessage:(NSString *)message andTimeout: (NSTimeInterval) timeout performBlockOnTimeout: (void(^) (void)) block {
+    [self showOverlayWithMessage:message];
+    timeoutBlock = block;
+    [NSTimer scheduledTimerWithTimeInterval:timeout target:self selector:@selector(executeTimeout) userInfo:nil repeats:NO];
+    
+}
+
+- (void) receiveTapEvent: (UIEvent *) event {
+    if (timeoutBlock) {
+        [self executeTimeout];
+    } else {
+        [self hideOverlay];
+    }
+}
+
 - (void) hideOverlay {
     [UIView animateWithDuration:0.7f animations:^{ [self setAlpha:0.0f]; }];
     overlayShown = NO;
+}
+
+- (void) executeTimeout {
+    if(timeoutBlock) {
+        timeoutBlock();
+        timeoutBlock = nil;
+    }
 }
 
 

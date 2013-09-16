@@ -26,6 +26,7 @@
 @property (retain) NSArray *warningControls;
 @property (retain) NSArray *autocompleteSearch;
 @property (retain) MJFancyOverlayView *overlay;
+@property (retain) UISearchBar *searchBar;
 
 
 
@@ -56,13 +57,14 @@
 @synthesize warningControls;
 @synthesize autocompleteSearch;
 @synthesize overlay;
+@synthesize searchBar;
 
 - (id) init {
     self = [super init];
     if (self != nil) {
         self.title = @"Search";
         
-        UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,70,320,44)];
+        searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,70,320,44)];
         searchBar.delegate = self;
         searchBar.placeholder = @"Enter Dish Name";
         
@@ -158,6 +160,8 @@
         }];
     }
     
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    
 }
 
 - (void) hideOverlay {
@@ -216,7 +220,6 @@
     [searchBar resignFirstResponder];
     [self searchForDish:[searchBar text]];
     [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar setText:@""];
 }
 
 #pragma mark UITableViewDatasource methods
@@ -255,7 +258,6 @@
     [searchBar resignFirstResponder];
     [self searchForDish:[searchBar text]];
     [searchBar setShowsCancelButton:NO animated:YES];
-    [searchBar setText:@""];
 }
 
 @end

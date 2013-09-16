@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MJFancyOverlayView : UIView
+@interface MJFancyOverlayView : UIControl
 
 @property (assign) BOOL overlayShown;
 
 - (id) initWithFrame:(CGRect) frame andDelegate:(UIViewController *) theDelegate;
 - (void) showOverlayWithMessage: (NSString *) message;
+- (void) showOverlayWithMessage:(NSString *)message andTimeout: (NSTimeInterval) timeout performBlockOnTimeout: (void(^) (void)) block;
 - (void) hideOverlay;
 
 @end
