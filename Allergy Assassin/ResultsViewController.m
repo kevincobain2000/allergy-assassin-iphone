@@ -89,25 +89,30 @@
 
 - (void) processResults {
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:[[self view] frame]];
-    scrollView.bounces = YES;
+        scrollView.bounces = YES;
     scrollView.scrollEnabled = YES;	
     
     NSString *caption = [results verboseResults];
     UILabel *label = [[UILabel alloc] init];
-    label.frame = CGRectMake(0, 260, [[self view] frame].size.width, 60);
+    label.frame = CGRectMake(0, 280,
+                    MAX([[self view] frame].size.width - 100, 320), 200);
+    [label setFont:[UIFont boldSystemFontOfSize:22.0f]];
     [label setText:caption];
     [label setLineBreakMode:NSLineBreakByWordWrapping];
     label.textAlignment = NSTextAlignmentCenter;
     [label setNumberOfLines:0];
+    [label sizeToFit];
+    [label setCenter:CGPointMake([[self view] center].x, [label center].y)];
     [scrollView addSubview:label];
 
     UIImageView *image = [[UIImageView alloc] initWithImage:[results highestRatingImage]];
     image.frame = CGRectMake(10,10, 250, 250);
-    image.center = CGPointMake([[self view] center].x, ([image bounds].size.height/2)+10);
+    image.center = CGPointMake([[self view] center].x, 135);
     [scrollView addSubview:image];
     
     
     [[self view] addSubview:scrollView];
+    
 }
 
 @end
