@@ -43,6 +43,10 @@
     return self;
 }
 
+- (void) viewDidLoad {
+    [self setEdgesForExtendedLayout:UIRectEdgeNone];
+}
+
 - (void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     [self showThrobber];

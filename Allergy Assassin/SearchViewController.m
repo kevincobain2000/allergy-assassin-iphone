@@ -109,6 +109,9 @@
 
 - (void) showInfo {
     
+    //make sure any previous hidden info displays are removed first!
+    [self hideInfo];
+    
     UIImageView *infoImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"info.png"]];
     
     infoImage.frame = CGRectMake(0,0, 35, 35);
@@ -171,16 +174,13 @@
 - (void) infoButtonWasPressed {
     
     UIViewController *aboutViewController = [[AboutViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:aboutViewController];
 
-    UIToolbar *toolBar;
-    toolBar = [[UIToolbar alloc] init];
-    [toolBar sizeToFit];
-    [toolBar setItems:@[
-            [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
-            [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(closeModalView)]]];
-    [aboutViewController.view addSubview:toolBar];
-                        
-    [[[[self view] window] rootViewController] presentViewController:aboutViewController animated:YES completion:nil];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(closeModalView)];
+    [[aboutViewController navigationItem] setRightBarButtonItem:doneButton];
+
+    [self presentViewController:nav animated:YES completion:nil];
+
 }
 
 - (void) closeModalView {
@@ -256,7 +256,8 @@
     UISearchBar *searchBar = (UISearchBar *) [tableView tableHeaderView];
     
     [searchBar resignFirstResponder];
-    [self searchForDish:[searchBar text]];
+    NSString *dish = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+    [self searchForDish:dish];
     [searchBar setShowsCancelButton:NO animated:YES];
 }
 

@@ -15,18 +15,24 @@
 
 @implementation AboutViewController
 
+- (void) viewDidLoad {
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     /*  not the ideal method to use for laying stuff out, but before this point
      * UI dimensions seem to be incorrectly reported in portrait instead of landscape?
      * Copious googling didn't glean any results, investigate further in future. */
+    [self setEdgesForExtendedLayout:UIRectEdgeNone];
     
     CGRect viewFrame = [[self view] frame];
     
-    if ([[[self view] subviews] count]) {
-        //we have a toolbar, resize reported viewFrame to take it into account
-        viewFrame.origin.y = viewFrame.origin.y + 44;
+    
+    //deal with overlapping status bar in iOS7 - this is really annoying & there must be a better way!
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f &&
+        UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        viewFrame.origin.y = viewFrame.origin.y + 20;
     }
     
     CGPoint frameCentre = [[self view] center];
@@ -76,6 +82,13 @@
     [[self view] addSubview:description];
     [[self view] addSubview:infoIcon];
     [[self view] addSubview:infoText];
+}
+
+- (void) viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    for(UIView *view in [[self view] subviews]) {
+        [view removeFromSuperview];
+    }
 }
 
 @end
