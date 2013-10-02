@@ -167,8 +167,8 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
     
     NSDictionary *verboseStrings =
               @{@0: @"No record of this dish found!",
-                @1: @[@"is probably safe to eat because it", @"usually does not contain"],
-                @2: @[@"is probably safe to eat because it", @"usually does not contain"],
+                @1: @[@"usually does not contain your allergens and is probably safe to eat."],
+                @2: @[@"usually does not contain your allergens and is probably safe to eat."],
                 @3: @[@"may be safe to eat, but it", @"occasionally contains"],
                 @4: @[@"may be safe to eat, but it", @"sometimes contains"],
                 @5: @[@"is probably NOT safe to eat, because it", @"usually does contain"]};
@@ -177,6 +177,8 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
     
     if ([rating isEqualToNumber:@0]) {
         verboseResult = verboseStrings[@0];
+    } else if ([@[@2,@1] containsObject:rating]) {
+        [verboseResult appendString:[@[dish, verboseStrings[rating][0]] componentsJoinedByString:@" "]];
     } else {
         if (succinct) {
             [verboseResult appendString: [@[dish,
