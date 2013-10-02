@@ -103,13 +103,20 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
 }
 
 - (id) initWithResultData:(NSData *) resultData {
-    self = [super init];
+    self = [self init];
     if (self != nil) {
         NSError *jsonParsingError = nil;
         NSDictionary *jsonResults = [NSJSONSerialization JSONObjectWithData:resultData options:0 error:&jsonParsingError];
         error = jsonParsingError;
         
         if (!error) {
+            
+            //ratings grouped by wording similarity - this must be changed if verboseStrings change!
+            unknownRating = @0;
+            unsafeRatings = @[@5];
+            warningRatings = @[@4, @3];
+            safeRatings = @[@2, @1];
+            
             apiVersion = [jsonResults objectForKey:@"version"];
             searchString = [[[jsonResults objectForKey:@"arguments"] objectForKey:@"q"] objectAtIndex:0];
             results = [[NSMutableDictionary alloc] init];
@@ -153,55 +160,64 @@ const NSUInteger numRatings = 6;  //number of different rating numbers
     } else return nil;
 }
 
++ (NSString *) verboseResultForDish: (NSString *) dish
+                      withAllergies: (NSArray *) allergies
+                      andRating:(NSNumber *) rating
+                      inSuccinctFormat: (BOOL) succinct {
+    
+    NSDictionary *verboseStrings =
+              @{@0: @"No record of this dish found!",
+                @1: @[@"is probably safe to eat because it", @"usually does not contain"],
+                @2: @[@"is probably safe to eat because it", @"usually does not contain"],
+                @3: @[@"may be safe to eat, but it", @"occasionally contains"],
+                @4: @[@"may be safe to eat, but it", @"sometimes contains"],
+                @5: @[@"is probably NOT safe to eat, because it", @"usually does contain"]};
+
+    NSMutableString *verboseResult = [[NSMutableString alloc] init];
+    
+    if ([rating isEqualToNumber:@0]) {
+        verboseResult = verboseStrings[@0];
+    } else {
+        if (succinct) {
+            [verboseResult appendString: [@[dish,
+                               verboseStrings[rating][0],
+                               verboseStrings[rating][1],
+                               [allergies verboseJoin]] componentsJoinedByString:@" "]];
+        } else {
+            [verboseResult appendString: [@[dish,
+                               verboseStrings[rating][1],
+                               [allergies verboseJoin]] componentsJoinedByString:@" "]];
+        }
+    }
+    
+    return verboseResult;
+
+}
+
 - (NSString *) verboseResults {
     NSMutableString *resultString = [[NSMutableString alloc] init];
-    
-    NSDictionary *verboseRatings = @{
-                         @1: [NSString stringWithFormat:@"%@ is probably safe to eat because it usually does not contain ", searchString],
-                         @2: [NSString stringWithFormat:@"%@ is probably safe to eat because it usually does not contain ", searchString],
-                         @3: [NSString stringWithFormat:@"%@ may be safe to eat, but sometimes contains ", searchString],
-                         @4: [NSString stringWithFormat:@"%@ may be safe to eat, but sometimes contains ", searchString],
-                         @5: [NSString stringWithFormat:@"%@ is probably NOT safe to eat, because it usually does contain ", searchString],
-                         @0: @" No record of this dish found!"};
-    
-    unknownRating = @0;
-    unsafeRatings = @[@3, @4, @5];
-    safeRatings = @[@1, @2];
-    warningRatings = @[@3, @4];
 
-    if ([[resultsByRating objectForKey:unknownRating] count] > 0) {
+    if ([resultsByRating[unknownRating] count] > 0) {
         // no record of searched recipe
-        resultString = [verboseRatings objectForKey:unknownRating];
+        [resultString appendString: [[self class] verboseResultForDish:searchString withAllergies:resultsByRating[@0] andRating:@0 inSuccinctFormat:NO]];
     } else {
         
-        BOOL unsafeOutput = NO;
+        // the first statement on safety should be verbose,
+        // after which additional comments should be succinct.
+        BOOL succinctOutput = NO;
         
-        for (NSNumber *rating in unsafeRatings) {
-            if ([[resultsByRating objectForKey:rating] count] > 0) {
-                if (unsafeOutput) {
-                    [resultString appendString:@"\nAdditionally, "];
-                }
-                
-                [resultString appendString:[verboseRatings objectForKey:rating ]];
-                [resultString appendString: [(NSArray *)[resultsByRating objectForKey:rating] verboseJoin]];
-                unsafeOutput = YES;
-            }
-        }
-        
-        
-        if (!unsafeOutput) {
-            // only show something is safe if not previously described as unsafe
-            BOOL safeOutput = NO;
-                                    
-            for (NSNumber *rating in safeRatings) {
-                if ([[resultsByRating objectForKey:rating] count] > 0) {
-                    if (safeOutput) {
-                        [resultString appendString:@"\nAdditionally, "];
+        for (NSArray *group in @[unsafeRatings, warningRatings, safeRatings]) {
+            for (NSNumber *rating in group) {
+                if ([resultsByRating[rating] count] > 0) {
+                    if (succinctOutput && [safeRatings containsObject:rating]) {
+                        //we've had output already, and this rating is safe, so no more!
+                    } else {
+                        if (succinctOutput) {
+                            [resultString appendString:@"\nAdditionally, "];
+                        }
+                        [resultString appendString:[[self class] verboseResultForDish:searchString withAllergies:resultsByRating[rating] andRating:rating inSuccinctFormat:!succinctOutput]];
+                        succinctOutput = YES;
                     }
-                
-                    [resultString appendString:[verboseRatings objectForKey:rating]];
-                    [resultString appendString:[(NSArray *) [resultsByRating objectForKey:rating] verboseJoin]];
-                    safeOutput = YES;
                 }
             }
         }
